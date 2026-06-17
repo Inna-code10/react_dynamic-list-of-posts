@@ -11,6 +11,7 @@ interface Props {
 
   commentsLoading: boolean;
   commentsError: boolean;
+  addCommentError: boolean;
 
   showCommentForm: boolean;
 
@@ -26,6 +27,7 @@ export const PostDetails: React.FC<Props> = ({
   comments,
   commentsLoading,
   commentsError,
+  addCommentError,
   showCommentForm,
   onShowForm,
   onAddComment,
@@ -47,6 +49,12 @@ export const PostDetails: React.FC<Props> = ({
         {!commentsLoading && commentsError && (
           <div className="notification is-danger" data-cy="CommentsError">
             Something went wrong
+          </div>
+        )}
+
+        {addCommentError && (
+          <div className="notification is-danger">
+            Failed to add comment. Please try again.
           </div>
         )}
 

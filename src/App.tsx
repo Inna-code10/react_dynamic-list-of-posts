@@ -31,6 +31,7 @@ export const App = () => {
   const [commentsError, setCommentsError] = useState(false);
 
   const [showCommentForm, setShowCommentForm] = useState(false);
+  const [addCommentError, setAddCommentError] = useState(false);
 
   useEffect(() => {
     client.get<User[]>('/users').then(setUsers);
@@ -79,12 +80,18 @@ export const App = () => {
       return;
     }
 
-    const newComment = await client.post<Comment>('/comments', {
-      ...data,
-      postId: selectedPost.id,
-    });
+    setAddCommentError(false);
 
-    setComments(current => [...current, newComment]);
+    try {
+      const newComment = await client.post<Comment>('/comments', {
+        ...data,
+        postId: selectedPost.id,
+      });
+
+      setComments(current => [...current, newComment]);
+    } catch {
+      setAddCommentError(true);
+    }
   };
 
   const handleDeleteComment = async (commentId: number) => {
@@ -163,6 +170,7 @@ export const App = () => {
                   comments={comments}
                   commentsLoading={commentsLoading}
                   commentsError={commentsError}
+                  addCommentError={addCommentError}
                   showCommentForm={showCommentForm}
                   onShowForm={() => setShowCommentForm(true)}
                   onAddComment={handleAddComment}
